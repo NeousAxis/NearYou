@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+        }
+
+        #output {
+            background: #f0f0f0;
+            padding: 10px;
+            white-space: pre-wrap;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test API Foursquare</h1>
+    <button onclick="testAPI()">Lancer le test (Coffee)</button>
+    <div id="status" style="margin-top: 20px;">En attente...</div>
+    <pre id="output"></pre>
+
+    <script>
+        async function testAPI() {
+            const status = document.getElementById('status');
+            const output = document.getElementById('output');
+
+            status.textContent = "Test en cours...";
+            output.textContent = "";
+
+            try {
+                // Get location first
+                status.textContent = "Obtention de la position...";
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+
+                status.textContent = `Position: ${lat}, ${lng}. Appel API...`;
+
+                const response = await fetch('/api/search-places', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lng,
+                        query: 'coffee',
+                        radius: 5000
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    status.textContent = "✅ Succès !";
+                    status.style.color = "green";
+                } else {
+                    status.textContent = "❌ Erreur API";
+                    status.style.color = "red";
+                }
+
+                output.textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                status.textContent = "❌ Erreur Technique";
+                status.style.color = "red";
+                output.textContent = error.toString();
+            }
+        }
+    </script>
+</body>
+
+</html>
