@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="theme-color" content="#007AFF" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>NearYou - Trouvez autour de vous</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,8 +15,10 @@
   <!-- Google AdSense Script -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9057470154911774"
     crossorigin="anonymous"></script>
-  <script type="module" crossorigin src="/assets/index-B9BxEqXo.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-C9sDPd3Z.css">
+  <meta name="google-adsense-account" content="ca-pub-9057470154911774">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <script type="module" crossorigin src="/assets/main-CjdRoVGs.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-u1V2fBPM.css">
 </head>
 
 <body>
@@ -54,6 +59,44 @@
       </section>
     </main>
 
+    <!-- How It Works Section (Adding Content for AdSense) -->
+    <section class="how-it-works">
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem;" data-i18n="howItWorksTitle">How it works?
+      </h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-icon">📸</span>
+          <h3 class="step-title" data-i18n="step1Title">Scan</h3>
+          <p class="step-desc" data-i18n="step1Desc">Take a photo of any object.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">🤖</span>
+          <h3 class="step-title" data-i18n="step2Title">Analyze</h3>
+          <p class="step-desc" data-i18n="step2Desc">Our AI identifies the object instantly.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">📍</span>
+          <h3 class="step-title" data-i18n="step3Title">Find (Physical)</h3>
+          <p class="step-desc" data-i18n="step3Desc">Discover shops around you.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-icon">🛒</span>
+          <h3 class="step-title" data-i18n="step4Title">Buy (Online)</h3>
+          <p class="step-desc" data-i18n="step4Desc">Get the best deals on the web.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-links">
+        <a href="/privacy.html" class="footer-link">Politique de confidentialité</a>
+        <a href="/terms.html" class="footer-link">Conditions d'utilisation</a>
+        <a href="mailto:contact@nearyouapp.xyz" class="footer-link">Contact</a>
+      </div>
+      <p class="copyright">© 2025 NearYou. All rights reserved.</p>
+    </footer>
+
     <!-- Loading Overlay -->
     <div id="loading-view" class="loading-overlay hidden">
       <div class="scanner-line"></div>
@@ -73,6 +116,9 @@
           <button id="choice-btn-2" class="choice-btn">
             <span class="choice-label"></span>
           </button>
+          <button id="choice-btn-3" class="choice-btn">
+            <span class="choice-label"></span>
+          </button>
         </div>
       </div>
     </div>
@@ -81,8 +127,18 @@
     <main id="results-view" class="hidden">
       <div class="results-container">
         <div class="results-header">
-          <h2 class="results-title" data-i18n="nearby">À proximité</h2>
-          <div class="sort-chips">
+          <div class="header-top">
+            <h2 class="results-title" data-i18n="nearby">À proximité</h2>
+            <div class="mode-toggle-wrapper">
+              <span class="toggle-text active" id="label-physical" data-i18n="physical">Physique</span>
+              <label class="switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-text" id="label-online" data-i18n="online">En ligne</span>
+            </div>
+          </div>
+          <div class="sort-chips" id="sort-controls">
             <button class="chip active" data-sort="distance" data-i18n="sortDistance">Proche</button>
             <button class="chip" data-sort="price" data-i18n="sortPrice">Prix</button>
           </div>

@@ -20,7 +20,31 @@ const TRANSLATIONS = {
       "Alimentation": "Alimentation"
     },
     physical: "Physique",
-    online: "En ligne"
+    physical: "Physique",
+    online: "En ligne",
+    howItWorksTitle: "Comment ça marche ?",
+    step1Title: "Scannez",
+    step1Desc: "Prenez une photo de n'importe quel objet.",
+    step2Title: "Analysez",
+    step2Desc: "Notre IA identifie l'objet instantanément.",
+    step3Title: "Trouvez (Physique)",
+    step3Desc: "Découvrez les magasins autour de vous.",
+    step4Title: "Achetez (En ligne)",
+    step4Desc: "Accédez aux meilleures offres sur le web.",
+    useCasesTitle: "Pourquoi utiliser NearYou ?",
+    useCase1Title: "Découverte Locale",
+    useCase1Desc: "Vous cherchez un produit spécifique mais ne savez pas où l'acheter ? Scannez-le et découvrez instantanément les magasins les plus proches qui le proposent.",
+    useCase2Title: "Comparaison Intelligente",
+    useCase2Desc: "Hésitez entre l'achat immédiat en magasin et la commande en ligne ? Comparez les disponibilités locales et les meilleures offres du web en un clin d'œil.",
+    useCase3Title: "Simplicité Absolue",
+    useCase3Desc: "Plus besoin de taper des mots-clés complexes. Une simple photo suffit pour lancer une recherche précise grâce à notre intelligence artificielle visuelle.",
+    faqTitle: "Questions Fréquentes",
+    faq1Q: "L'application est-elle gratuite ?",
+    faq1A: "Oui, NearYou est entièrement gratuite à utiliser pour la recherche visuelle et la découverte de lieux.",
+    faq2Q: "Comment fonctionne la détection ?",
+    faq2A: "Nous utilisons des modèles d'intelligence artificielle avancés pour analyser vos photos et identifier les objets avec une grande précision.",
+    faq3Q: "Mes photos sont-elles conservées ?",
+    faq3A: "Non, nous respectons votre vie privée. Les images sont analysées en temps réel et ne sont pas stockées sur nos serveurs après l'analyse."
   },
   en: {
     heroTitle: "Find what<br>you need.",
@@ -40,7 +64,31 @@ const TRANSLATIONS = {
       "Alimentation": "Food & Drink"
     },
     physical: "Physical",
-    online: "Online"
+    physical: "Physical",
+    online: "Online",
+    howItWorksTitle: "How it works?",
+    step1Title: "Scan",
+    step1Desc: "Take a photo of any object.",
+    step2Title: "Analyze",
+    step2Desc: "Our AI identifies the object instantly.",
+    step3Title: "Find (Physical)",
+    step3Desc: "Discover shops around you.",
+    step4Title: "Buy (Online)",
+    step4Desc: "Get the best deals on the web.",
+    useCasesTitle: "Why use NearYou?",
+    useCase1Title: "Local Discovery",
+    useCase1Desc: "Looking for a specific product but don't know where to buy it? Scan it and instantly discover the nearest stores that offer it.",
+    useCase2Title: "Smart Comparison",
+    useCase2Desc: "Hesitating between buying immediately in-store or ordering online? Compare local availability and the best web deals in the blink of an eye.",
+    useCase3Title: "Absolute Simplicity",
+    useCase3Desc: "No need to type complex keywords. A simple photo is enough to launch a precise search thanks to our visual artificial intelligence.",
+    faqTitle: "Frequently Asked Questions",
+    faq1Q: "Is the app free?",
+    faq1A: "Yes, NearYou is completely free to use for visual search and place discovery.",
+    faq2Q: "How does detection work?",
+    faq2A: "We use advanced AI models to analyze your photos and identify objects with high precision.",
+    faq3Q: "Are my photos stored?",
+    faq3A: "No, we respect your privacy. Images are analyzed in real-time and are not stored on our servers after analysis."
   },
   vi: {
     heroTitle: "Tìm những gì<br>bạn cần.",
@@ -57,7 +105,16 @@ const TRANSLATIONS = {
     categories: {
       "Fournitures de bureau": "Văn phòng phẩm",
       "Alimentation": "Thực phẩm & Đồ uống"
-    }
+    },
+    howItWorksTitle: "Làm thế nào nó hoạt động?",
+    step1Title: "Quét",
+    step1Desc: "Chụp ảnh bất kỳ đồ vật nào.",
+    step2Title: "Phân tích",
+    step2Desc: "AI của chúng tôi nhận diện đồ vật ngay lập tức.",
+    step3Title: "Tìm (Thực tế)",
+    step3Desc: "Khám phá các cửa hàng xung quanh bạn.",
+    step4Title: "Mua (Trực tuyến)",
+    step4Desc: "Nhận các ưu đãi tốt nhất trên web."
   },
   es: {
     heroTitle: "Encuentra lo que<br>buscas.",
@@ -74,7 +131,16 @@ const TRANSLATIONS = {
     categories: {
       "Fournitures de bureau": "Artículos de oficina",
       "Alimentation": "Alimentación"
-    }
+    },
+    howItWorksTitle: "¿Cómo funciona?",
+    step1Title: "Escanear",
+    step1Desc: "Toma una foto de cualquier objeto.",
+    step2Title: "Analizar",
+    step2Desc: "Nuestra IA identifica el objeto al instante.",
+    step3Title: "Encontrar (Físico)",
+    step3Desc: "Descubre tiendas a tu alrededor.",
+    step4Title: "Comprar (En línea)",
+    step4Desc: "Obtén las mejores ofertas en la web."
   },
   de: {
     heroTitle: "Finde, was<br>du suchst.",
@@ -91,7 +157,16 @@ const TRANSLATIONS = {
     categories: {
       "Fournitures de bureau": "Bürobedarf",
       "Alimentation": "Lebensmittel"
-    }
+    },
+    howItWorksTitle: "Wie funktioniert es?",
+    step1Title: "Scannen",
+    step1Desc: "Mach ein Foto von einem beliebigen Objekt.",
+    step2Title: "Analysieren",
+    step2Desc: "Unsere KI identifiziert das Objekt sofort.",
+    step3Title: "Finden (Physisch)",
+    step3Desc: "Entdecke Geschäfte in deiner Nähe.",
+    step4Title: "Kaufen (Online)",
+    step4Desc: "Erhalte die besten Angebote im Web."
   },
   it: {
     heroTitle: "Trova ciò che<br>cerchi.",
@@ -108,7 +183,16 @@ const TRANSLATIONS = {
     categories: {
       "Fournitures de bureau": "Forniture per ufficio",
       "Alimentation": "Alimentari"
-    }
+    },
+    howItWorksTitle: "Come funziona?",
+    step1Title: "Scansiona",
+    step1Desc: "Scatta una foto di qualsiasi oggetto.",
+    step2Title: "Analizza",
+    step2Desc: "La nostra IA identifica l'oggetto all'istante.",
+    step3Title: "Trova (Fisico)",
+    step3Desc: "Scopri i negozi intorno a te.",
+    step4Title: "Compra (Online)",
+    step4Desc: "Ottieni le migliori offerte sul web."
   }
 };
 
@@ -214,11 +298,16 @@ scanBtn.addEventListener('click', () => fileInput.click());
 logoBtn.addEventListener('click', () => {
   state.results = [];
   state.detectedCategory = null;
+  state.searchMode = 'physical'; // Reset mode
+  modeToggle.checked = false;
+  labelOnline.classList.remove('active');
+  labelPhysical.classList.add('active');
   switchView('search');
 });
 
-// Restore State on Load
+// Restore State or Default
 if (state.currentView === 'results' && state.results.length > 0) {
+  // Sync toggle with state
   if (state.searchMode === 'online') {
     modeToggle.checked = true;
     labelOnline.classList.add('active');
@@ -230,14 +319,23 @@ if (state.currentView === 'results' && state.results.length > 0) {
   }
 
   // Sort chips restoration
+
   sortChips.forEach(c => {
     c.classList.toggle('active', c.dataset.sort === state.sortBy);
   });
 
   renderResults();
   switchView('results');
-} else if (state.currentView) {
-  switchView(state.currentView);
+} else {
+  // Default to Physical if not restoring a result view
+  state.searchMode = 'physical';
+  modeToggle.checked = false;
+  labelOnline.classList.remove('active');
+  labelPhysical.classList.add('active');
+
+  if (state.currentView) {
+    switchView(state.currentView);
+  }
 }
 
 // Helpers
@@ -478,6 +576,12 @@ langSelect.addEventListener('change', (e) => {
 });
 
 fileInput.addEventListener('change', (e) => {
+  // Reset to physical mode on new scan
+  state.searchMode = 'physical';
+  modeToggle.checked = false;
+  labelOnline.classList.remove('active');
+  labelPhysical.classList.add('active');
+
   if (e.target.files && e.target.files[0]) {
     handleImageUpload(e.target.files[0]);
   }
@@ -488,6 +592,10 @@ resetBtn.addEventListener('click', () => {
   state.detectedCategory = null;
   state.actualSearchTerm = null;
   state.fallbackInfo = null;
+  state.searchMode = 'physical'; // Reset mode
+  modeToggle.checked = false;
+  labelOnline.classList.remove('active');
+  labelPhysical.classList.add('active');
   switchView('search'); // This calls saveState
 });
 

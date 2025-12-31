@@ -526,6 +526,7 @@ main {
     opacity: 1;
   }
 }
+
 /* Update Results Header Layout */
 .results-header {
   display: flex !important;
@@ -550,7 +551,7 @@ main {
   background: rgba(255, 255, 255, 0.5);
   padding: 4px 8px;
   border-radius: 20px;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .toggle-text {
@@ -599,24 +600,25 @@ main {
   background-color: white;
   transition: .4s;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background: var(--primary-gradient);
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #007AFF;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(20px);
 }
 
 /* Online Result Card Specifics */
 .place-card.online-result {
-  border-left: 4px solid #34C759; /* Green for online */
+  border-left: 4px solid #34C759;
+  /* Green for online */
 }
 
 .online-link-btn {
@@ -630,5 +632,165 @@ input:checked + .slider:before {
   font-size: 0.85rem;
   margin-top: auto;
   align-self: flex-start;
-  box-shadow: 0 4px 10px rgba(0,122,255,0.2);
+  box-shadow: 0 4px 10px rgba(0, 122, 255, 0.2);
+}
+
+/* How It Works Section */
+.how-it-works {
+  margin-top: 4rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.step-card {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.step-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.step-title {
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Footer & Legal */
+.app-footer {
+  margin-top: auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: var(--primary-color);
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Content Sections (AdSense Optimization) */
+.content-section {
+  padding: 4rem 1.5rem;
+  max-width: 100%;
+}
+
+.content-section.alt-bg {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--text-main);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.feature-item {
+  text-align: left;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.feature-item h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.feature-item p {
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.faq-item h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text-main);
+}
+
+.faq-item p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+
+  .how-it-works,
+  .content-section {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
 }
