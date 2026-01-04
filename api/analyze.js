@@ -61,6 +61,15 @@ CRITICAL RULES:
 - **PHYSICAL SEARCH TERMS (options 1-3) MUST BE PHYSICAL PLACES.**
 - **NEVER** use "Amazon", "eBay" or "Online" in options 1-3.
 - **NEVER** use the Product Model (e.g. "Vision", "Airpods") as the \`search_term\`. Google Maps/OSM DOES NOT know product inventory. SEARCH FOR THE BRAND OR STORE TYPE.
+- **ONLINE LINKS (online_recommendations) MUST BE LOCALIZED**. 
+    - **Prioritize LOCAL E-COMMERCE GIANTS** for the country "${contextCountry}".
+    - Example:
+        - Vietnam: Shopee.vn, Lazada.vn, Tiki.vn, CellphoneS
+        - France: Amazon.fr, Fnac.com, Cdiscount, LeBonCoin
+        - Russia: Ozon.ru, Wildberries, Yandex Market
+        - Japan: Rakuten.co.jp, Amazon.co.jp
+        - South East Asia: Shopee, Lazada
+    - **DO NOT** default to Amazon.com unless specifically relevant or no local alternative exists.
 
 Return ONLY a JSON object:
 {
@@ -82,7 +91,7 @@ Return ONLY a JSON object:
   },
   "online_recommendations": [
     {
-      "name": "Merchant Name",
+      "name": "Merchant Name (e.g. Shopee VN)",
       "url": "https://...",
       "type": "New" or "Used",
       "price_level": "High" or "Medium" or "Low"
