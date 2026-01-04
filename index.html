@@ -58,6 +58,44 @@
       </section>
     </main>
 
+    <!-- Results Section -->
+    <main id="results-view" class="hidden">
+      <div class="results-container">
+        <div class="results-header">
+          <div class="header-top">
+            <h2 class="results-title" data-i18n="nearby">À proximité</h2>
+            <div class="mode-toggle-wrapper">
+              <span class="toggle-text active" id="label-physical" data-i18n="physical">Physique</span>
+              <label class="switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider"></span>
+              </label>
+              <span class="toggle-text" id="label-online" data-i18n="online">En ligne</span>
+            </div>
+          </div>
+          <div class="sort-chips" id="sort-controls">
+            <button class="chip active" data-sort="distance" data-i18n="sortDistance">Proche</button>
+            <button class="chip" data-sort="price" data-i18n="sortPrice">Prix</button>
+          </div>
+        </div>
+
+        <div id="detected-badge" class="detected-badge hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span data-i18n="detected">Détecté :</span>&nbsp;<span id="detected-label">Objet</span>
+        </div>
+
+        <div id="results-grid">
+          <!-- Results injected here -->
+        </div>
+      </div>
+
+      <button id="reset-btn" class="reset-fab" data-i18n="newSearch">Nouvelle recherche</button>
+    </main>
+
     <!-- How It Works Section (Adding Content for AdSense) -->
     <section class="how-it-works">
       <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem;" data-i18n="howItWorksTitle">How it works?
@@ -180,43 +218,7 @@
       </div>
     </div>
 
-    <!-- Results Section -->
-    <main id="results-view" class="hidden">
-      <div class="results-container">
-        <div class="results-header">
-          <div class="header-top">
-            <h2 class="results-title" data-i18n="nearby">À proximité</h2>
-            <div class="mode-toggle-wrapper">
-              <span class="toggle-text active" id="label-physical" data-i18n="physical">Physique</span>
-              <label class="switch">
-                <input type="checkbox" id="mode-toggle">
-                <span class="slider"></span>
-              </label>
-              <span class="toggle-text" id="label-online" data-i18n="online">En ligne</span>
-            </div>
-          </div>
-          <div class="sort-chips" id="sort-controls">
-            <button class="chip active" data-sort="distance" data-i18n="sortDistance">Proche</button>
-            <button class="chip" data-sort="price" data-i18n="sortPrice">Prix</button>
-          </div>
-        </div>
 
-        <div id="detected-badge" class="detected-badge hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <span data-i18n="detected">Détecté :</span>&nbsp;<span id="detected-label">Objet</span>
-        </div>
-
-        <div id="results-grid">
-          <!-- Results injected here -->
-        </div>
-      </div>
-
-      <button id="reset-btn" class="reset-fab" data-i18n="newSearch">Nouvelle recherche</button>
-    </main>
   </div>
   <script type="module" src="/nearyou-core.js"></script>
 </body>
