@@ -97,11 +97,12 @@ export default async function handler(req, res) {
         // URL for Faster Mirror (Kumi Systems often faster)
         const OVERPASS_URL = 'https://overpass.kumi.systems/api/interpreter';
 
-        // Tier 1: Strict Search (Name OR Brand OR Operator)
-        if (osmTag) {
+        // TIER 1 & 1.5: Query-based Search (Only if query exists)
+        if (osmTag && query) {
+
+            // Tier 1: Strict Search (Name OR Brand OR Operator)
             console.log(`Tier 1: Searching ${osmTag} with query "${query}"`);
 
-            // Extract the key/value for the tag
             const [tKey, tValue] = osmTag.split('=');
             const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -131,48 +132,55 @@ export default async function handler(req, res) {
             } catch (e) {
                 console.warn('Tier 1 search failed (trying fallback)', e);
             }
-        }
 
-        // TIER 1.5: Relaxed Query (First word -> Brand/Name)
-        if (allResults.length === 0 && osmTag && query && query.includes(' ')) {
-            const firstWord = query.split(' ')[0];
-            if (firstWord.length > 2) {
-                console.log(`Tier 1.5: Searching ${osmTag} with first word "${firstWord}"`);
+            // TIER 1.5: Relaxed Query (First word -> Brand/Name)
+            if (allResults.length === 0 && query.includes(' ')) {
+                const firstWord = query.split(' ')[0];
+                if (firstWord.length > 2) {
+                    console.log(`Tier 1.5: Searching ${osmTag} with first word "${firstWord}"`);
 
-                const [tKey, tValue] = osmTag.split('=');
-                const safeWord = firstWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const safeWord = firstWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const filter15 = `
+                        (
+                            node["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
+                            way["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
+                            node["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
+                            way["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
+                        );
+                    `;
 
-                const filter = `
-                    (
-                        node["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                        way["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                        node["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                        way["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                    );
-                `;
+                    const query15 = `[out:json][timeout:15];${filter15}out center 20;`;
 
-                const query15 = `[out:json][timeout:15];${filter}out center 20;`;
-
-                try {
-                    const response15 = await fetch(OVERPASS_URL, {
-                        method: 'POST',
-                        body: query15
-                    });
-                    const data15 = await response15.json();
-                    if (data15.elements && data15.elements.length > 0) {
-                        allResults = data15.elements;
+                    try {
+                        const response15 = await fetch(OVERPASS_URL, {
+                            method: 'POST',
+                            body: query15
+                        });
+                        const data15 = await response15.json();
+                        if (data15.elements && data15.elements.length > 0) {
+                            allResults = data15.elements;
+                        }
+                    } catch (e) {
+                        console.warn('Tier 1.5 search failed', e);
                     }
-                } catch (e) {
-                    console.warn('Tier 1.5 search failed', e);
                 }
             }
         }
 
         // TIER 2: Category Match Only (Fallback)
-        if (allResults.length === 0 && osmTag && query) {
-            console.log(`Tier 2: Searching ${osmTag} without name filter`);
-            fallbackTier = 2;
-            fallbackMessage = `Aucun distributeur "${query}" identifié. Voici les magasins de ce type à proximité.`;
+        // Runs if:
+        // 1. No query was provided (Generic search)
+        // 2. Query was provided but yielded 0 results (Fallback to category)
+        if (allResults.length === 0 && osmTag) {
+            console.log(`Tier 2: Searching ${osmTag} without name filter (Generic/Fallback)`);
+
+            if (query) {
+                fallbackTier = 2;
+                fallbackMessage = `Aucun distributeur "${query}" identifié. Voici les magasins de ce type à proximité.`;
+            } else {
+                // Pure category search shouldn't show "fallback" warning, it's just normal results
+                fallbackTier = 1;
+            }
 
             const [tKey, tValue] = osmTag.split('=');
 
@@ -185,14 +193,18 @@ export default async function handler(req, res) {
                 out center 20;
             `;
 
-            const response2 = await fetch(OVERPASS_URL, {
-                method: 'POST',
-                body: query2
-            });
+            try {
+                const response2 = await fetch(OVERPASS_URL, {
+                    method: 'POST',
+                    body: query2
+                });
 
-            const data2 = await response2.json();
-            if (data2.elements && data2.elements.length > 0) {
-                allResults = data2.elements;
+                const data2 = await response2.json();
+                if (data2.elements && data2.elements.length > 0) {
+                    allResults = data2.elements;
+                }
+            } catch (e) {
+                console.warn('Tier 2 search failed', e);
             }
         }
 
