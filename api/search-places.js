@@ -38,8 +38,13 @@ export default async function handler(req, res) {
             'bakery': 'shop=bakery',
             'shoe': 'shop=shoes',
             'footwear': 'shop=shoes',
+            'sneaker': 'shop=shoes',
+            'trainers': 'shop=shoes',
+            'boots': 'shop=shoes',
+            'heels': 'shop=shoes',
             'clothing': 'shop=clothes',
             'fashion': 'shop=clothes',
+            'apparel': 'shop=clothes',
             'sport': 'shop=sports',
             'convenience': 'shop=convenience',
             'retail': 'shop=general',
@@ -48,7 +53,23 @@ export default async function handler(req, res) {
             'car': 'shop=car',
             'automotive': 'shop=car',
             'bicycle': 'shop=bicycle',
-            'bike': 'shop=bicycle'
+            'bike': 'shop=bicycle',
+            'book': 'shop=books',
+            'library': 'shop=books',
+            'toy': 'shop=toys',
+            'game': 'shop=toys',
+            'beauty': 'shop=beauty',
+            'cosmetic': 'shop=beauty',
+            'perfume': 'shop=perfumery',
+            'jewelry': 'shop=jewelry',
+            'watch': 'shop=watches',
+            'gift': 'shop=gift',
+            'flower': 'shop=florist',
+            'florist': 'shop=florist',
+            'garden': 'shop=garden_centre',
+            'hardware': 'shop=doityourself',
+            'furniture': 'shop=furniture',
+            'pet': 'shop=pet'
         };
 
         let fallbackTier = 1;
@@ -65,6 +86,12 @@ export default async function handler(req, res) {
                     break;
                 }
             }
+        }
+
+        // Fallback: If no specific category matched, use generic shop
+        if (!osmTag) {
+            console.log(`No specific tag found for category "${category}", defaulting to shop=yes`);
+            osmTag = 'shop=yes'; // Matches any shop
         }
 
         // URL for Faster Mirror (Kumi Systems often faster)
