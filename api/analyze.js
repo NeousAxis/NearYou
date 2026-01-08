@@ -57,6 +57,13 @@ TASK:
    - Option 3 (Category): Label = "Find [Category]", search_term = "[Category]".
 5. Generate 4-6 SPECIFIC ONLINE BUYING LINKS.
 
+**CRITICAL: SMART PLACE DETECTION**
+For each search option, you MUST determine the list of OpenStreetMap (OSM) tags where this item is likely sold.
+- Think broadly: "Where can I buy this TODAY?"
+- Example: "Toothpaste" -> ["shop=supermarket", "shop=convenience", "amenity=pharmacy", "shop=chemist", "shop=general"]
+- Example: "Running Shoes" -> ["shop=shoes", "shop=sports", "shop=clothes", "shop=department_store", "shop=mall"]
+- Example: "Bread" -> ["shop=bakery", "shop=supermarket", "shop=convenience", "amenity=cafe"]
+
 CRITICAL RULES:
 - **PHYSICAL SEARCH TERMS (options 1-3) MUST BE PHYSICAL PLACES.**
 - **NEVER** use "Amazon", "eBay" or "Online" in options 1-3.
@@ -77,17 +84,20 @@ Return ONLY a JSON object:
   "option1": { 
     "label": "Find [Product Name]", 
     "category": "ENGLISH Category", 
-    "search_term": "BRAND NAME ONLY (e.g. 'Honda', 'Apple')" 
+    "search_term": "BRAND NAME ONLY (e.g. 'Honda', 'Apple')",
+    "osm_search_tags": ["tag1=value1", "tag2=value2"] 
   },
   "option2": { 
     "label": "Find [Brand] Store", 
     "category": "ENGLISH Category", 
-    "search_term": "BRAND NAME (e.g. 'Honda')" 
+    "search_term": "BRAND NAME (e.g. 'Honda')",
+    "osm_search_tags": ["tag1=value1", "tag2=value2"]
   },
   "option3": { 
     "label": "Find [Category]", 
     "category": "ENGLISH Category", 
-    "search_term": "CATEGORY NAME (e.g. 'Motorcycle Dealer')" 
+    "search_term": "CATEGORY NAME (e.g. 'Motorcycle Dealer')",
+    "osm_search_tags": ["tag1=value1", "tag2=value2"]
   },
   "online_recommendations": [
     {
