@@ -836,7 +836,8 @@ async function handleChoice(optionNumber) {
     selectedOption.category,
     analysis.item,
     cleanSearchTerm,
-    isSpecific
+    isSpecific,
+    selectedOption.osm_search_tags // Pass AI-generated tags
   );
 
   state.results = searchData.results || [];
@@ -851,68 +852,17 @@ choiceBtn1.addEventListener('click', () => handleChoice(1));
 choiceBtn2.addEventListener('click', () => handleChoice(2));
 choiceBtn3.addEventListener('click', () => handleChoice(3));
 
-// Map category names to OpenStreetMap tags
-function getCategoryOSMTags(categoryName) {
-  const lowerCategory = categoryName.toLowerCase();
 
-  // Common mappings (expand as needed)
-  if (lowerCategory.includes('coffee') || lowerCategory.includes('café') || lowerCategory.includes('cafe')) {
-    return ['amenity=cafe'];
-  }
-  if (lowerCategory.includes('restaurant') || lowerCategory.includes('pizzeria')) {
-    return ['amenity=restaurant'];
-  }
-  if (lowerCategory.includes('stationery') || lowerCategory.includes('papeterie') || lowerCategory.includes('office supply')) {
-    return ['shop=stationery'];
-  }
-  if (lowerCategory.includes('grocery') || lowerCategory.includes('supermarket') || lowerCategory.includes('alimentation')) {
-    return ['shop=supermarket'];
-  }
-  if (lowerCategory.includes('bakery') || lowerCategory.includes('boulangerie')) {
-    return ['shop=bakery'];
-  }
-  if (lowerCategory.includes('sport') || lowerCategory.includes('luggage') || lowerCategory.includes('backpack')) {
-    return ['shop=sports'];
-  }
-  if (lowerCategory.includes('electronics') || lowerCategory.includes('phone') || lowerCategory.includes('mobile')) {
-    return ['shop=electronics', 'shop=mobile_phone'];
-  }
-  if (lowerCategory.includes('kitchenware') || lowerCategory.includes('home goods')) {
-    return ['shop=houseware'];
-  }
 
-  // New Categories
-  if (lowerCategory.includes('bank') || lowerCategory.includes('banque')) {
-    return ['amenity=bank'];
-  }
-  if (lowerCategory.includes('atm') || lowerCategory.includes('distributeur')) {
-    return ['amenity=atm'];
-  }
-  if (lowerCategory.includes('pharmacy') || lowerCategory.includes('pharmacie')) {
-    return ['amenity=pharmacy'];
-  }
-  if (lowerCategory.includes('hospital') || lowerCategory.includes('hôpital')) {
-    return ['amenity=hospital'];
-  }
-  if (lowerCategory.includes('fast food') || lowerCategory.includes('snack')) {
-    return ['amenity=fast_food'];
-  }
-  if (lowerCategory.includes('hotel') || lowerCategory.includes('hôtel')) {
-    return ['tourism=hotel'];
-  }
-
-  // Default fallback
-  return ['shop=general'];
-}
-
-async function generateDynamicResults(userLat, userLng, categoryName, itemName, searchTerm, isSpecific) {
+async function generateDynamicResults(userLat, userLng, categoryName, itemName, searchTerm, isSpecific, osmTags = []) {
   try {
     // Prepare search parameters
     const searchParams = {
       latitude: userLat,
       longitude: userLng,
       category: categoryName,
-      radius: 50000 // 50km
+      radius: 50000, // 50km
+      osmTags: osmTags // Pass explicit tags if available
     };
 
     // Add specific search term if provided

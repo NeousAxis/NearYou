@@ -15,204 +15,219 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { latitude, longitude, query, category, radius = 50000 } = req.body;
+        const { latitude, longitude, query, category, radius = 50000, osmTags: providedOsmTags } = req.body;
 
         if (!latitude || !longitude) {
             return res.status(400).json({ error: 'Missing latitude or longitude' });
         }
 
-        // Map category to OpenStreetMap tags
+        // Map category to OpenStreetMap tags (English + French support)
+        // Map category to OpenStreetMap tags (English + French support)
         const categoryMap = {
-            'electronics': 'shop=electronics',
-            'phone': 'shop=mobile_phone',
-            'mobile': 'shop=mobile_phone',
-            'coffee': 'amenity=cafe',
-            'cafe': 'amenity=cafe',
-            'restaurant': 'amenity=restaurant',
-            'bank': 'amenity=bank',
-            'atm': 'amenity=atm',
-            'pharmacy': 'amenity=pharmacy',
-            'hospital': 'amenity=hospital',
-            'hotel': 'tourism=hotel',
-            'supermarket': 'shop=supermarket',
-            'bakery': 'shop=bakery',
-            'shoe': 'shop=shoes',
-            'footwear': 'shop=shoes',
-            'sneaker': 'shop=shoes',
-            'trainers': 'shop=shoes',
-            'boots': 'shop=shoes',
-            'heels': 'shop=shoes',
-            'clothing': 'shop=clothes',
-            'fashion': 'shop=clothes',
-            'apparel': 'shop=clothes',
-            'sport': 'shop=sports',
-            'convenience': 'shop=convenience',
-            'retail': 'shop=general',
-            'motorcycle': 'shop=motorcycle',
-            'scooter': 'shop=motorcycle',
-            'car': 'shop=car',
-            'automotive': 'shop=car',
-            'bicycle': 'shop=bicycle',
-            'bike': 'shop=bicycle',
-            'book': 'shop=books',
-            'library': 'shop=books',
-            'toy': 'shop=toys',
-            'game': 'shop=toys',
-            'beauty': 'shop=beauty',
-            'cosmetic': 'shop=beauty',
-            'perfume': 'shop=perfumery',
-            'jewelry': 'shop=jewelry',
-            'watch': 'shop=watches',
-            'gift': 'shop=gift',
-            'flower': 'shop=florist',
-            'florist': 'shop=florist',
-            'garden': 'shop=garden_centre',
-            'hardware': 'shop=doityourself',
-            'furniture': 'shop=furniture',
-            'pet': 'shop=pet'
+            // Electronics
+            'electronics': ['shop=electronics', 'shop=computer', 'shop=radiotechnics', 'shop=vacuum_cleaner'],
+            'phone': ['shop=mobile_phone', 'shop=electronics', 'shop=telecommunication'],
+            'mobile': ['shop=mobile_phone', 'shop=electronics'],
+            'téléphone': ['shop=mobile_phone', 'shop=electronics'],
+            'ordinateur': ['shop=computer', 'shop=electronics'],
+
+            // Food & Drink / Groceries
+            'coffee': ['amenity=cafe', 'shop=coffee'],
+            'cafe': ['amenity=cafe', 'shop=coffee'],
+            'café': ['amenity=cafe', 'shop=coffee'],
+            'restaurant': ['amenity=restaurant', 'amenity=food_court', 'amenity=fast_food'],
+            'bakery': ['shop=bakery', 'shop=pastry'],
+            'boulangerie': ['shop=bakery', 'shop=pastry'],
+            'supermarket': ['shop=supermarket', 'shop=convenience', 'shop=department_store', 'shop=general', 'shop=variety_store'],
+            'supermarché': ['shop=supermarket', 'shop=convenience', 'shop=department_store', 'shop=general', 'shop=variety_store'],
+            'grocery': ['shop=supermarket', 'shop=convenience', 'shop=greengrocer', 'shop=food'],
+            'alimentation': ['shop=supermarket', 'shop=convenience', 'shop=food', 'shop=general'],
+            'food': ['shop=supermarket', 'shop=convenience', 'shop=food'],
+
+            // Toiletry / Hygiene
+            'dentifrice': ['shop=supermarket', 'amenity=pharmacy', 'shop=chemist', 'shop=convenience', 'shop=variety_store', 'shop=department_store', 'shop=drugstore'],
+            'toothpaste': ['shop=supermarket', 'amenity=pharmacy', 'shop=chemist', 'shop=convenience', 'shop=variety_store', 'shop=department_store', 'shop=drugstore'],
+            'shampoo': ['shop=supermarket', 'amenity=pharmacy', 'shop=chemist', 'shop=convenience', 'shop=beauty', 'shop=drugstore'],
+
+            // Services
+            'bank': ['amenity=bank'],
+            'banque': ['amenity=bank'],
+            'atm': ['amenity=atm'],
+            'distributeur': ['amenity=atm'],
+            'pharmacy': ['amenity=pharmacy', 'shop=chemist', 'shop=drugstore'],
+            'pharmacie': ['amenity=pharmacy', 'shop=chemist', 'shop=drugstore'],
+            'hospital': ['amenity=hospital', 'amenity=clinic'],
+            'hôpital': ['amenity=hospital', 'amenity=clinic'],
+            'hotel': ['tourism=hotel', 'tourism=guest_house', 'tourism=hostel'],
+            'hôtel': ['tourism=hotel', 'tourism=guest_house', 'tourism=hostel'],
+
+            // Fashion & Shoes
+            'shoe': ['shop=shoes', 'shop=sports', 'shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'shoes': ['shop=shoes', 'shop=sports', 'shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'footwear': ['shop=shoes', 'shop=sports', 'shop=clothes', 'shop=department_store'],
+            'sneaker': ['shop=shoes', 'shop=sports', 'shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'basket': ['shop=shoes', 'shop=sports', 'shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'chaussure': ['shop=shoes', 'shop=clothes', 'shop=sports', 'shop=department_store', 'shop=fashion'],
+            'clothing': ['shop=clothes', 'shop=department_store', 'shop=boutique', 'shop=fashion'],
+            'clothes': ['shop=clothes', 'shop=department_store', 'shop=boutique', 'shop=fashion'],
+            'vêtement': ['shop=clothes', 'shop=department_store', 'shop=boutique'],
+            'fashion': ['shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'mode': ['shop=clothes', 'shop=department_store', 'shop=fashion'],
+            'apparel': ['shop=clothes', 'shop=department_store'],
+            'sport': ['shop=sports', 'shop=outdoor'],
+
+            // Retail & Misc
+            'convenience': ['shop=convenience', 'shop=supermarket', 'shop=variety_store'],
+            'retail': ['shop=general', 'shop=department_store', 'shop=variety_store', 'shop=mall'],
+            'motorcycle': ['shop=motorcycle'],
+            'moto': ['shop=motorcycle'],
+            'scooter': ['shop=motorcycle'],
+            'car': ['shop=car'],
+            'voiture': ['shop=car'],
+            'automotive': ['shop=car', 'shop=car_parts'],
+            'bicycle': ['shop=bicycle', 'shop=sports'],
+            'bike': ['shop=bicycle', 'shop=sports'],
+            'vélo': ['shop=bicycle', 'shop=sports'],
+            'book': ['shop=books', 'shop=newsagent'],
+            'livre': ['shop=books', 'shop=newsagent'],
+            'librairie': ['shop=books', 'shop=stationery'],
+            'library': ['amenity=library', 'shop=books'],
+            'toy': ['shop=toys', 'shop=department_store', 'shop=gift'],
+            'jouet': ['shop=toys', 'shop=department_store', 'shop=gift'],
+            'game': ['shop=toys', 'shop=video_games'],
+            'beauty': ['shop=beauty', 'shop=cosmetics', 'amenity=pharmacy', 'shop=drugstore'],
+            'beauté': ['shop=beauty', 'shop=cosmetics', 'amenity=pharmacy', 'shop=drugstore'],
+            'cosmetic': ['shop=beauty', 'shop=cosmetics', 'amenity=pharmacy', 'shop=drugstore', 'shop=department_store'],
+            'cosmétique': ['shop=beauty', 'shop=cosmetics', 'amenity=pharmacy', 'shop=department_store'],
+            'perfume': ['shop=perfumery', 'shop=beauty', 'shop=cosmetics', 'shop=department_store'],
+            'parfum': ['shop=perfumery', 'shop=beauty', 'shop=cosmetics', 'shop=department_store'],
+            'jewelry': ['shop=jewelry', 'shop=watches', 'shop=fashion'],
+            'bijou': ['shop=jewelry', 'shop=fashion_accessories'],
+            'watch': ['shop=watches', 'shop=jewelry'],
+            'montre': ['shop=watches', 'shop=jewelry'],
+            'gift': ['shop=gift', 'shop=souvenir'],
+            'cadeau': ['shop=gift', 'shop=souvenir'],
+            'flower': ['shop=florist', 'shop=garden_centre'],
+            'florist': ['shop=florist'],
+            'fleur': ['shop=florist'],
+            'garden': ['shop=garden_centre', 'shop=doityourself'],
+            'jardin': ['shop=garden_centre', 'shop=doityourself'],
+            'hardware': ['shop=doityourself', 'shop=hardware', 'shop=trade'],
+            'bricolage': ['shop=doityourself', 'shop=hardware'],
+            'furniture': ['shop=furniture', 'shop=department_store', 'shop=home_center'],
+            'meuble': ['shop=furniture', 'shop=department_store'],
+            'pet': ['shop=pet'],
+            'animal': ['shop=pet']
         };
 
-        let fallbackTier = 1;
-        let fallbackMessage = null;
-        let allResults = [];
+        // Find OSM tags
+        let osmTags = [];
 
-        // Find OSM tag for category
-        let osmTag = null;
-        if (category) {
+        // STRATEGY A: Use AI-provided tags (Smartest)
+        if (providedOsmTags && Array.isArray(providedOsmTags) && providedOsmTags.length > 0) {
+            osmTags = providedOsmTags;
+            console.log(`Using AI-provided tags for "${category}":`, osmTags);
+        } else if (category) {
+            // STRATEGY B: Fallback to static map (Legacy/Backup)
             const lowerCategory = category.toLowerCase();
-            for (const [keyword, tag] of Object.entries(categoryMap)) {
+            for (const [keyword, tags] of Object.entries(categoryMap)) {
                 if (lowerCategory.includes(keyword)) {
-                    osmTag = tag;
+                    osmTags = Array.isArray(tags) ? tags : [tags];
                     break;
                 }
             }
         }
 
-        // Fallback: If no specific category matched, use generic shop
-        if (!osmTag) {
+        // Fallback to generic shop if no tag found
+        if (osmTags.length === 0) {
             console.log(`No specific tag found for category "${category}", defaulting to shop=yes`);
-            osmTag = 'shop=yes'; // Matches any shop
+            osmTags = ['shop=yes'];
         }
 
-        // URL for Faster Mirror (Kumi Systems often faster)
         const OVERPASS_URL = 'https://overpass.kumi.systems/api/interpreter';
 
-        // TIER 1 & 1.5: Query-based Search (Only if query exists)
-        if (osmTag && query) {
+        // Helper to fetch from Overpass
+        const fetchOverpass = async (filterQuery, searchRadius, limit = 100) => {
+            const overpassQuery = `
+                [out:json][timeout:25];
+                (
+                    ${filterQuery}
+                );
+                out center ${limit};
+            `;
 
-            // Tier 1: Strict Search (Name OR Brand OR Operator)
-            console.log(`Tier 1: Searching ${osmTag} with query "${query}"`);
+            try {
+                const response = await fetch(OVERPASS_URL, {
+                    method: 'POST',
+                    body: overpassQuery
+                });
+                const data = await response.json();
+                return data.elements || [];
+            } catch (e) {
+                console.warn(`Overpass fetch failed for radius ${searchRadius}`, e);
+                return [];
+            }
+        };
 
-            const [tKey, tValue] = osmTag.split('=');
+        const buildQueryPart = (tags, searchRadius, queryStr = null) => {
+            let parts = '';
+            tags.forEach(tag => {
+                const [tKey, tValue] = tag.split('=');
+                if (queryStr) {
+                    parts += `
+                        node["${tKey}"="${tValue}"]["name"~"${queryStr}",i](around:${searchRadius},${latitude},${longitude});
+                        way["${tKey}"="${tValue}"]["name"~"${queryStr}",i](around:${searchRadius},${latitude},${longitude});
+                        node["${tKey}"="${tValue}"]["brand"~"${queryStr}",i](around:${searchRadius},${latitude},${longitude});
+                        way["${tKey}"="${tValue}"]["brand"~"${queryStr}",i](around:${searchRadius},${latitude},${longitude});
+                     `;
+                } else {
+                    parts += `
+                        node["${tKey}"="${tValue}"](around:${searchRadius},${latitude},${longitude});
+                        way["${tKey}"="${tValue}"](around:${searchRadius},${latitude},${longitude});
+                     `;
+                }
+            });
+            return parts;
+        };
+
+        // --- EXECUTE SEARCH STRATEGY ---
+
+        const queries = [];
+
+        // 1. TIER 1: Specific Name/Brand Search (If query exists)
+        // We look far (50km) because specific shops might be rare.
+        if (query && query.length > 2) {
             const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-            // Build filter: Matches Name OR Brand OR Operator
-            const filter = `
-                (
-                    node["${tKey}"="${tValue}"]["name"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                    way["${tKey}"="${tValue}"]["name"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                    node["${tKey}"="${tValue}"]["brand"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                    way["${tKey}"="${tValue}"]["brand"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                    node["${tKey}"="${tValue}"]["operator"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                    way["${tKey}"="${tValue}"]["operator"~"${safeQuery}",i](around:${radius},${latitude},${longitude});
-                );
-            `;
-
-            const query1 = `[out:json][timeout:15];${filter}out center 20;`;
-
-            try {
-                const response1 = await fetch(OVERPASS_URL, {
-                    method: 'POST',
-                    body: query1
-                });
-                const data1 = await response1.json();
-                if (data1.elements && data1.elements.length > 0) {
-                    allResults = data1.elements;
-                }
-            } catch (e) {
-                console.warn('Tier 1 search failed (trying fallback)', e);
-            }
-
-            // TIER 1.5: Relaxed Query (First word -> Brand/Name)
-            if (allResults.length === 0 && query.includes(' ')) {
-                const firstWord = query.split(' ')[0];
-                if (firstWord.length > 2) {
-                    console.log(`Tier 1.5: Searching ${osmTag} with first word "${firstWord}"`);
-
-                    const safeWord = firstWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    const filter15 = `
-                        (
-                            node["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                            way["${tKey}"="${tValue}"]["name"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                            node["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                            way["${tKey}"="${tValue}"]["brand"~"${safeWord}",i](around:${radius},${latitude},${longitude});
-                        );
-                    `;
-
-                    const query15 = `[out:json][timeout:15];${filter15}out center 20;`;
-
-                    try {
-                        const response15 = await fetch(OVERPASS_URL, {
-                            method: 'POST',
-                            body: query15
-                        });
-                        const data15 = await response15.json();
-                        if (data15.elements && data15.elements.length > 0) {
-                            allResults = data15.elements;
-                        }
-                    } catch (e) {
-                        console.warn('Tier 1.5 search failed', e);
-                    }
-                }
-            }
+            const filterTier1 = buildQueryPart(osmTags, radius, safeQuery);
+            queries.push(fetchOverpass(filterTier1, radius, 50));
         }
 
-        // TIER 2: Category Match Only (Fallback)
-        // Runs if:
-        // 1. No query was provided (Generic search)
-        // 2. Query was provided but yielded 0 results (Fallback to category)
-        if (allResults.length === 0 && osmTag) {
-            console.log(`Tier 2: Searching ${osmTag} without name filter (Generic/Fallback)`);
+        // 2. TIER 2 (LOCAL): Generic Category Search (High Priority)
+        // Search strictly nearby (3km) first to ensure we catch the shop "in front of the user".
+        const filterLocal = buildQueryPart(osmTags, 3000);
+        queries.push(fetchOverpass(filterLocal, 3000, 100));
 
-            if (query) {
-                fallbackTier = 2;
-                fallbackMessage = `Aucun distributeur "${query}" identifié. Voici les magasins de ce type à proximité.`;
-            } else {
-                // Pure category search shouldn't show "fallback" warning, it's just normal results
-                fallbackTier = 1;
-            }
+        // Execute parallel
+        const resultsArrays = await Promise.all(queries);
 
-            const [tKey, tValue] = osmTag.split('=');
+        // Merge results
+        let combined = resultsArrays.flat();
 
-            const query2 = `
-                [out:json][timeout:15];
-                (
-                    node["${tKey}"="${tValue}"](around:${radius},${latitude},${longitude});
-                    way["${tKey}"="${tValue}"](around:${radius},${latitude},${longitude});
-                );
-                out center 20;
-            `;
+        // 3. TIER 2 (EXPANDED): If we didn't find enough local generic results, expand.
+        // This solves the "Toothpaste" issue where maybe the nearest supermarkets are > 3km (rural).
+        // Check if unique generic items < 10
+        const uniqueIds = new Set(combined.map(el => el.id));
+        if (uniqueIds.size < 5) { // Reduced threshold from 10 to 5 to avoid unnecessary expansion
+            console.log('Few local results found, expanding generic search...');
+            const filterExpanded = buildQueryPart(osmTags, 50000);
 
-            try {
-                const response2 = await fetch(OVERPASS_URL, {
-                    method: 'POST',
-                    body: query2
-                });
-
-                const data2 = await response2.json();
-                if (data2.elements && data2.elements.length > 0) {
-                    allResults = data2.elements;
-                }
-            } catch (e) {
-                console.warn('Tier 2 search failed', e);
-            }
+            // We fetch 100 to ensure we capture relevant ones
+            const expandedResults = await fetchOverpass(filterExpanded, 50000, 100);
+            combined = combined.concat(expandedResults);
         }
 
-        // TIER 3 DISABLED: Was returning too many irrelevant results
-        // Better to show "no results" than food stores for shoe searches
-
-        // Transform OSM results
-        const results = allResults.map(element => {
+        // Process and Deduplicate
+        const processedResults = combined.map(element => {
             const lat = element.lat || element.center?.lat || latitude;
             const lon = element.lon || element.center?.lon || longitude;
             const distance = getDistanceFromLatLonInKm(latitude, longitude, lat, lon);
@@ -232,13 +247,24 @@ export default async function handler(req, res) {
             };
         });
 
-        // Sort by distance
-        results.sort((a, b) => a.distance - b.distance);
+        // Deduplicate by ID
+        const uniqueResults = [];
+        const seenIds = new Set();
+        for (const item of processedResults) {
+            if (!seenIds.has(item.id)) {
+                seenIds.add(item.id);
+                uniqueResults.push(item);
+            }
+        }
 
+        // Sort by distance (ASC)
+        uniqueResults.sort((a, b) => a.distance - b.distance);
+
+        // Prepare response
         return res.status(200).json({
-            results: results.slice(0, 20),
-            fallback_tier: fallbackTier,
-            fallback_message: fallbackMessage
+            results: uniqueResults.slice(0, 20),
+            fallback_tier: uniqueResults.length > 0 ? 1 : 2, // Simplified tiering
+            fallback_message: uniqueResults.length === 0 ? "Aucun résultat trouvé." : null
         });
 
     } catch (error) {
